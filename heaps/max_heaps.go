@@ -142,7 +142,3 @@ func (heap *MaxHeap) updateVal(i int, newVal int) error {
 
 	return nil
 }
-
-// func (heap *MaxHeap) heapify(i int) {
-
-// }

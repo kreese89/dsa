@@ -1,7 +1,10 @@
 package heaps
 
 import (
+	"fmt"
 	"testing"
+
+	"github.com/kreese89/dsa/heaps/generic_heap"
 )
 
 func TestBasicHeap(t *testing.T) {
@@ -65,4 +68,27 @@ func TestQueueLikeFunc(t *testing.T) {
 		t.Fatalf("Expected error on Pop on empty heap, got nil")
 	}
 
+}
+
+func TestBasicHeapGeneric(t *testing.T) {
+	arr := []int{5, 7, -10, 6, 7, 2}
+	sortedArr := []int{7, 7, 6, 5, 2, -10}
+	heap := generic_heap.MakeHeap(arr, true)
+
+	if heap.Empty() {
+		t.Fatalf("Heap is empty!")
+	}
+	fmt.Printf("%v", heap)
+
+	i := 0
+	for !heap.Empty() {
+		ele, err := heap.Pop()
+		if err != nil {
+			t.Fatalf("Popped on an empty heap")
+		}
+		if ele != sortedArr[i] {
+			t.Fatalf("Expected: %v, Got: %v", sortedArr[i], ele)
+		}
+		i++
+	}
 }
