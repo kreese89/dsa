@@ -1,7 +1,6 @@
 package heaps
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/kreese89/dsa/heaps/generic_heap"
@@ -52,6 +51,7 @@ func TestQueueLikeFunc(t *testing.T) {
 	}
 
 	heap.Push(-1)
+	val, err = heap.Peek()
 	if err != nil {
 		t.Fatalf("Encountered error when peeking heap")
 	} else if val != 5 {
@@ -78,11 +78,11 @@ func TestBasicHeapGeneric(t *testing.T) {
 	if heap.Empty() {
 		t.Fatalf("Heap is empty!")
 	}
-	fmt.Printf("%v", heap)
 
 	i := 0
 	for !heap.Empty() {
 		ele, err := heap.Pop()
+
 		if err != nil {
 			t.Fatalf("Popped on an empty heap")
 		}
@@ -90,5 +90,108 @@ func TestBasicHeapGeneric(t *testing.T) {
 			t.Fatalf("Expected: %v, Got: %v", sortedArr[i], ele)
 		}
 		i++
+	}
+	// testing minimized heap
+	arr = []int{5, 7, -10, 6, 7, 2}
+	sortedArr = []int{-10, 2, 5, 6, 7, 7}
+	heap = generic_heap.MakeHeap(arr, false)
+
+	if heap.Empty() {
+		t.Fatalf("Heap is empty!")
+	}
+
+	i = 0
+	for !heap.Empty() {
+		ele, err := heap.Pop()
+
+		if err != nil {
+			t.Fatalf("Popped on an empty heap")
+		}
+		if ele != sortedArr[i] {
+			t.Fatalf("Expected: %v, Got: %v", sortedArr[i], ele)
+		}
+		i++
+	}
+
+}
+
+func TestBasicQueueLikeFuncGeneric(t *testing.T) {
+	// testing max
+	heap := generic_heap.NewHeap[int](true)
+	err := heap.Push(1)
+
+	if err != nil {
+		t.Fatalf("Encountered error when pushing onto heap")
+	}
+	val, err := heap.Peek()
+	if err != nil {
+		t.Fatalf("Encountered error when peeking heap")
+	} else if val != 1 {
+		t.Fatalf("Encountered a different value")
+	}
+
+	heap.Push(5)
+	val, err = heap.Peek()
+	if err != nil {
+		t.Fatalf("Encountered error when peeking heap")
+	} else if val != 5 {
+		t.Fatalf("Encountered %v, expected 5", val)
+	}
+
+	heap.Push(-1)
+	if err != nil {
+		t.Fatalf("Encountered error when peeking heap")
+	} else if val != 5 {
+		t.Fatalf("Encountered %v, expected 5", val)
+	}
+
+	heap.Pop()
+	heap.Pop()
+	heap.Pop()
+
+	val, err = heap.Pop()
+
+	if err == nil {
+		t.Fatalf("Expected error on Pop on empty heap, got nil")
+	}
+
+	// testing min
+	heap = generic_heap.NewHeap[int](false)
+	err = heap.Push(1)
+
+	if err != nil {
+		t.Fatalf("Encountered error when pushing onto heap")
+	}
+	val, err = heap.Peek()
+	if err != nil {
+		t.Fatalf("Encountered error when peeking heap")
+	} else if val != 1 {
+		t.Fatalf("Encountered a different value")
+	}
+
+	heap.Push(5)
+	val, err = heap.Peek()
+	if err != nil {
+		t.Fatalf("Encountered error when peeking heap")
+	} else if val != 1 {
+		t.Fatalf("Encountered %v, expected 1", val)
+	}
+
+	heap.Push(-1)
+	val, err = heap.Peek()
+	if err != nil {
+		t.Fatalf("Encountered error when peeking heap")
+	} else if val != -1 {
+		t.Fatalf("Encountered %v, expected -1", val)
+	}
+
+	heap.Pop()
+	heap.Pop()
+	heap.Pop()
+
+	val, err = heap.Pop()
+
+	if err == nil {
+		t.Fatalf("Expected error on Pop on empty heap, got nil")
 	}
 }

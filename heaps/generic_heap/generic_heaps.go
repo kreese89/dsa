@@ -53,7 +53,8 @@ func (heap *Heap[T]) Pop() (T, error) {
 }
 
 func (heap *Heap[T]) Push(val T) error {
-	return nil
+	heap.data = append(heap.data, val)
+	return heap.updateVal(len(heap.data)-1, val)
 }
 
 func (heap *Heap[T]) Size() int {
@@ -73,22 +74,15 @@ func (heap Heap[T]) String() string {
 func (heap *Heap[T]) heapify(i int) {
 	left := heap.left(i)
 	right := heap.right(i)
-	var optimum int
+	optimum := i
 
 	if left < len(heap.data) {
-		// fmt.Printf("%v %v %v\n", heap.data[i], heap.data[left], cmp.Less(heap.data[i], heap.data[left]))
 		if cmp.Less(heap.data[i], heap.data[left]) {
-			// heap.data[i] < heap.data[left]
 			if heap.maximize {
 				optimum = left
-			} else {
-				optimum = i
 			}
 		} else {
-			// heap.data[i] >= heap.data[left]
-			if heap.maximize {
-				optimum = i
-			} else {
+			if !heap.maximize {
 				optimum = left
 			}
 		}
@@ -96,12 +90,10 @@ func (heap *Heap[T]) heapify(i int) {
 
 	if right < len(heap.data) {
 		if cmp.Less(heap.data[optimum], heap.data[right]) {
-			// heap.data[optimum] < heap.data[right]
 			if heap.maximize {
 				optimum = right
 			}
 		} else {
-			// heap.data[optimum] >= heap.data[right]
 			if !heap.maximize {
 				optimum = right
 			}
@@ -149,6 +141,6 @@ func (heap *Heap[T]) right(i int) int {
 
 func (heap *Heap[T]) parent(i int) int {
 	var j int
-	j = i / 2
+	j = (i - 1) / 2
 	return j
 }
